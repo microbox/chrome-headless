@@ -1,5 +1,7 @@
 FROM microbox/chromium-builder
 
+RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
+
 ARG CHROMIUM_VERSION
 
 RUN gclient config https://chromium.googlesource.com/chromium/src.git
@@ -17,8 +19,6 @@ RUN git config --global user.email "git@microbox.com" \
     && git config --global user.name "Microbox" \
     && cd third_party/webrtc \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
-
-RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
 
 RUN gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap -v -v
 
