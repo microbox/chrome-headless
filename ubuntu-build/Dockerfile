@@ -21,10 +21,11 @@ RUN git config --global user.email "git@microbox.com" \
     && cd third_party/webrtc \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
 
-RUN gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v
+RUN gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v --nohooks
 
-#RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks
-#RUN gclient runhooks
+#RUN gclient sync -r ${REVERSION} --no-history --shallow --reset --nohooks
+
+RUN gclient runhooks
 RUN ./build/install-build-deps.sh --no-prompt
 
 RUN mkdir -p out/headless \
