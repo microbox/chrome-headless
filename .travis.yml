@@ -18,20 +18,21 @@ before_install:
   - echo $VERSION
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - echo $TAG
+  - export REPO=$TRAVIS_REPO_SLUG
+  - echo $REPO
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
 
 install:
-  - docker build -t ubuntu-build --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-build
+  - docker build -t ubuntu-build -t $REPO:build-${TAG} --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-build
   - export CID=$(docker create ubuntu-build)
   - docker cp $CID:/root/chromium/headless.tar.gz debian
   - docker rm $CID
+  - docker push $REPO
 
 script:
-  - export REPO=$TRAVIS_REPO_SLUG
   - docker build -t $REPO:$TAG debian
 
 after_success:
-
   - docker images
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - docker push $REPO
 
