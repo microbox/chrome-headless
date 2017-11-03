@@ -8,16 +8,29 @@ notifications:
     on_success: never
     on_failure: change
 
-script:
-  - docker build -t busybox-build busybox-build
-  - export CID=$(docker create busybox-build)
-  - docker cp $CID:/rootfs.tar busybox
+before_install:
+  - git ls-remote --tags https://chromium.googlesource.com/chromium/src.git > TAGS \
+    && cat TAGS | grep refs | cut -d/ -f3 | sort -rn | head -1 > VERSION \
+    && rm -f TAGS
+  - export LATEST_VERSION=`cat VERSION`
+  - echo $LATEST_VERSION
+  - export VERSION=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo $LATEST_VERSION; else echo $TRAVIS_BRANCH ; fi`
+  - echo $VERSION
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - echo $TAG
+
+install:
+  - docker build -t ubuntu-build --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-build
+  - export CID=$(docker create ubuntu-build)
+  - docker cp $CID:/root/chromium/headless.tar.gz debian
   - docker rm $CID
 
-after_success:
+script:
   - export REPO=$TRAVIS_REPO_SLUG
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker build -t $REPO:$TAG busybox
+  - docker build -t $REPO:$TAG debian
+
+after_success:
+
   - docker images
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - docker push $REPO
