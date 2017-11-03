@@ -10,9 +10,10 @@ RUN git clone --branch ${CHROMIUM_VERSION} --depth=1 https://chromium.googlesour
 
 WORKDIR /root/chromium/src
 
-RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks --jobs 16
+RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --jobs 16
 
-RUN gclient runhooks
+#RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks --jobs 16
+#RUN gclient runhooks
 
 # RUN ./build/install-build-deps.sh --no-prompt
 
