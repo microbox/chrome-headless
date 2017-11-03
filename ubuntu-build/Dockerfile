@@ -21,7 +21,8 @@ RUN git config --global user.email "git@microbox.com" \
     && cd third_party/webrtc \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
 
-RUN gclient sync -r ${REVERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v
+RUN REVERSION=`git rev-parse HEAD` \
+    && gclient sync -r ${REVERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v
 
 #RUN gclient sync -r ${REVERSION} --no-history --shallow --reset --nohooks
 
