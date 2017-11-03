@@ -15,7 +15,7 @@ RUN gclient sync -r ${CHROMIUM_VERSION} --no-history  --with_tags
 #RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks --jobs 16
 #RUN gclient runhooks
 
-# RUN ./build/install-build-deps.sh --no-prompt
+RUN ./build/install-build-deps.sh --no-prompt
 
 RUN mkdir -p out/headless \
     && echo 'import("/root/chromium/src/build/args/headless.gn")' > out/headless/args.gn \
