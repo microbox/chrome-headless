@@ -14,14 +14,14 @@ RUN mkdir /root/chromium/cache
 WORKDIR /root/chromium/src
 
 RUN REVERSION=`git rev-parse HEAD` \
-    && (gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v) || echo 'ignore error'
+    && (gclient sync -r ${REVERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v) || echo 'ignore error'
 
 RUN git config --global user.email "git@microbox.com" \
     && git config --global user.name "Microbox" \
     && cd third_party/webrtc \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
 
-RUN gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v
+RUN gclient sync -r ${REVERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v
 
 #RUN gclient sync -r ${REVERSION} --no-history --shallow --reset --nohooks
 
