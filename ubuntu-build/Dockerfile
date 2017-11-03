@@ -11,7 +11,7 @@ RUN git clone --branch ${CHROMIUM_VERSION} --depth=1 https://chromium.googlesour
 WORKDIR /root/chromium/src
 
 RUN REVERSION=`git rev-parse HEAD` \
-    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap
+    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap -v -v -v
 #RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks
 #RUN gclient runhooks
 RUN ./build/install-build-deps.sh --no-prompt
