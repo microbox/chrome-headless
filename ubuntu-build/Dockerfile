@@ -18,6 +18,8 @@ RUN git config --global user.email "git@microbox.com" \
     && cd third_party/webrtc \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
 
+RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
+
 RUN gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap -v -v
 
 #RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks
