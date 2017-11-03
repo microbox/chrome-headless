@@ -1,5 +1,7 @@
 FROM microbox/chromium-builder
 
+RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
+
 ARG CHROMIUM_VERSION
 
 RUN gclient config https://chromium.googlesource.com/chromium/src.git
@@ -7,11 +9,12 @@ RUN gclient config https://chromium.googlesource.com/chromium/src.git
 RUN echo $CHROMIUM_VERSION
 
 RUN git clone --branch ${CHROMIUM_VERSION} --depth=1 https://chromium.googlesource.com/chromium/src.git
+RUN mkdir /root/chromium/cache
 
 WORKDIR /root/chromium/src
 
 RUN REVERSION=`git rev-parse HEAD` \
-    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap -v -v -v
+    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v
 #RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks
 #RUN gclient runhooks
 RUN ./build/install-build-deps.sh --no-prompt
