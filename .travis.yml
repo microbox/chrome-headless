@@ -9,6 +9,7 @@ notifications:
     on_failure: change
 
 before_install:
+  - apt list --installed
   - (du -h -d 1 /) || echo 'ignore error'
   - df -hT
   - git ls-remote --tags https://chromium.googlesource.com/chromium/src.git > ./TAGS
