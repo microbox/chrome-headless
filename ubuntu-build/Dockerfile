@@ -22,7 +22,7 @@ RUN git config --global user.email "git@microbox.com" \
     && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
 
 RUN REVERSION=`git rev-parse HEAD` \
-    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v
+    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v --nohooks
 
 #RUN gclient sync -r ${REVERSION} --no-history --shallow --reset --nohooks
 RUN gclient runhooks
