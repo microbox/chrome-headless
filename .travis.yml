@@ -10,7 +10,9 @@ notifications:
 
 before_install:
   - apt list --installed
-  - (du -h -d 1 /) || echo 'ignore error'
+  - sudo apt-get autoclean
+  - sudo apt-get clean
+  - (sudo du -h -d 2 /) || echo 'ignore error'
   - df -hT
   - git ls-remote --tags https://chromium.googlesource.com/chromium/src.git > ./TAGS
   - cat ./TAGS | grep refs | cut -d/ -f3 | sort -rn | head -1 > ./VERSION
