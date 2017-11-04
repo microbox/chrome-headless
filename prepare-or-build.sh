@@ -2,20 +2,24 @@
 
 if [ -d "out/headless" ]; then
 
+  ls -ahl out/headless
+  du -h -d 1 out/headless
+
   # load pull docker image and run directly
-  docker pull microbox/chromium-builder:headless-${VERSION}
-  docker run -it microbox/chromium-builder:headless-${CHROMIUM_VERSION} -v out:/root/chromium/src/out timeout 40m ninja -C out/headless headless_shell
+  docker pull microbox/chromium-builder:headless-builder-${VERSION}
+  docker run -it microbox/chromium-builder:headless-builder-${CHROMIUM_VERSION} -v out:/root/chromium/src/out timeout 40m ninja -C out/headless headless_shell
+
+  ls -ahl out/headless
+  du -h -d 1 out/headless
 
   if [ -e "out/headless/headless_shell" ]; then
 
-    tar zcvf debian/headless.tar.gz out/headless/headless_shell out/headless/*.pak
+    cd out/headless
+    tar zcvf ../../debian/headless.tar.gz headless_shell *.pak
+    cd ../../
     docker build -t ${REPO}:${TAG} debian
     docker push ${REPO}
     rm -rf out/headless
-  else
-
-    ls -ahl out/headless
-    du -h -d 1 out/headless
 
   fi;
 
