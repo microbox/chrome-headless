@@ -4,6 +4,7 @@ if [ -d "out/headless" ]; then
 
   # load pull docker image and run directly
   docker pull microbox/chromium-builder:headless-${VERSION}
+  docker run -it microbox/chromium-builder:headless-${CHROMIUM_VERSION} /bin/bash
   docker build -t ubuntu-build --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-build
   export CID=$(docker create ubuntu-build)
   docker cp $CID:/root/chromium/headless.tar.gz debian
@@ -14,8 +15,10 @@ if [ -d "out/headless" ]; then
 else
 
   mkdir -p out
-  docker build -t microbox/chromium-builder:headless-${VERSION} -v out:/root/chromium/src/out --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-source
-  docker push microbox/chromium-builder:headless-${VERSION}
+  docker build -t chromium-builder -t microbox/chromium-builder:headless-builder-${VERSION} --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-source
+  docker push microbox/chromium-builder:headless-builder-${VERSION}
+  export CBID=$(docker create chromium-builder)
+  docker cp $CBID:/root/chromium/src/out/headless out
 
 fi
 
