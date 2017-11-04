@@ -1,40 +1,5 @@
-FROM microbox/chromium-builder
-
-RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
-
 ARG CHROMIUM_VERSION
-
-RUN gclient config https://chromium.googlesource.com/chromium/src.git
-
-RUN echo $CHROMIUM_VERSION
-
-RUN git clone --branch ${CHROMIUM_VERSION} --depth=1 https://chromium.googlesource.com/chromium/src.git
-RUN mkdir /root/chromium/cache
-
-WORKDIR /root/chromium/src
-
-RUN REVERSION=`git rev-parse HEAD` \
-    && (gclient sync -r ${REVERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v) || echo 'ignore error'
-
-RUN git config --global user.email "git@microbox.com" \
-    && git config --global user.name "Microbox" \
-    && cd third_party/webrtc \
-    && git fetch origin a2329acf18dc0653106782f63f54675dab9c483e
-
-RUN REVERSION=`git rev-parse HEAD` \
-    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v --nohooks
-
-#RUN gclient sync -r ${REVERSION} --no-history --shallow --reset --nohooks
-RUN gclient runhooks
-
-RUN ./build/install-build-deps.sh --no-prompt
-
-RUN mkdir -p out/headless \
-    && echo 'import("/root/chromium/src/build/args/headless.gn")' > out/headless/args.gn \
-    && echo 'is_debug = false' >> out/headless/args.gn \
-    && echo 'use_jumbo_build=true' >> out/headless/args.gn \
-    && echo 'remove_webcore_debug_symbols=true' >> out/headless/args.gn \
-    && gn gen out/headless
+FROM microbox/chromium-builder:headless-${CHROMIUM_VERSION}
 
 RUN ninja -C out/headless headless_shell
 
