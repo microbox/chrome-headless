@@ -4,6 +4,7 @@ services:
   - docker
 
 cache:
+  timeout: 86400
   directories:
     - out
 
