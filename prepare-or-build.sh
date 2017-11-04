@@ -26,7 +26,7 @@ if [ -d "out/headless" ]; then
 else
 
   mkdir -p out
-  docker build -t chromium-builder -t microbox/chromium-builder:headless-builder-${VERSION} --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-source
+  docker build -t chromium-builder -t microbox/chromium-builder:headless-builder-${VERSION} --build-arg CHROMIUM_VERSION=${VERSION} ubuntu-builder
   docker push microbox/chromium-builder:headless-builder-${VERSION}
   export CBID=$(docker create chromium-builder)
   docker cp $CBID:/root/chromium/src/out/headless out
