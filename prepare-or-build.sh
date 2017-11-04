@@ -32,6 +32,8 @@ else
   export CBID=$(docker create chromium-builder)
   docker cp $CBID:/root/chromium/src/out/headless out
   touch out/headless/${VERSION}
+  ls -ahl out/headless
+  du -h -d 1 out/headless
 
 fi
 
