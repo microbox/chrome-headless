@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -d "out/headless" ]; then
+if [ -d "out/headless" ] && [ -e "out/headless/${VERSION}" ]; then
 
   ls -ahl out/headless
   du -h -d 1 out/headless
@@ -30,6 +30,7 @@ else
   docker push microbox/chromium-builder:headless-builder-${VERSION}
   export CBID=$(docker create chromium-builder)
   docker cp $CBID:/root/chromium/src/out/headless out
+  touch out/headless/${VERSION}
 
 fi
 
