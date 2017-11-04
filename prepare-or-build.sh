@@ -7,7 +7,7 @@ if [ -d "out/headless" ] && [ -e "out/headless/"${VERSION} ]; then
 
   # load pull docker image and run directly
   docker pull microbox/chromium-builder:headless-builder-${VERSION}
-  docker run -it microbox/chromium-builder:headless-builder-${CHROMIUM_VERSION} -v out:/root/chromium/src/out timeout 40m ninja -C out/headless headless_shell
+  docker run -it microbox/chromium-builder:headless-builder-${VERSION} -v out:/root/chromium/src/out timeout 40m ninja -C out/headless headless_shell
 
   ls -ahl out/headless
   du -h -d 1 out/headless
