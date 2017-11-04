@@ -24,6 +24,7 @@ before_install:
 #  - (sudo du -h -d 2 /usr/local) || echo 'ignore error'
 #  - (sudo du -h -d 2 /home/travis) || echo 'ignore error'
   - df -hT
+  - du -h -d 2 out
 
 
 install:
