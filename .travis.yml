@@ -30,6 +30,7 @@ before_install:
 #  - (sudo du -h -d 2 /home/travis) || echo 'ignore error'
   - df -hT
   - du -h -d 2 out
+  - ls -ahl out
 
 
 install:
@@ -45,9 +46,13 @@ install:
   - echo $REPO
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
 
+
 script:
   - ./prepare-or-build.sh
 
+
 after_success:
+  - du -h -d 2 out
+  - ls -ahl out
   - docker images
 
