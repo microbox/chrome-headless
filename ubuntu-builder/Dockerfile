@@ -13,7 +13,7 @@ RUN mkdir /root/chromium/cache
 
 WORKDIR /root/chromium/src
 
-RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --shallow --no_bootstrap --deps=unix  --cache-dir=/root/chromium/cache -v -v
+RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --shallow --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v
 
 RUN ./build/install-build-deps.sh --no-prompt
 
