@@ -13,10 +13,8 @@ RUN mkdir /root/chromium/cache
 
 WORKDIR /root/chromium/src
 
-RUN REVERSION=`git rev-parse HEAD` \
-    && gclient sync -r ${REVERSION} --no-history --shallow --auto_rebase --merge --no_bootstrap --deps=unix --cache-dir=/root/chromium/cache -v -v
-#RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --reset --shallow --nohooks
-#RUN gclient runhooks
+RUN gclient sync -r ${CHROMIUM_VERSION} --no-history --shallow --no_bootstrap --deps=unix  --cache-dir=/root/chromium/cache -v -v
+
 RUN ./build/install-build-deps.sh --no-prompt
 
 RUN mkdir -p out/headless \
@@ -26,6 +24,3 @@ RUN mkdir -p out/headless \
     && echo 'remove_webcore_debug_symbols=true' >> out/headless/args.gn \
     && gn gen out/headless
 
-RUN ninja -C out/headless headless_shell
-
-RUN tar zcvf ../headless.tar.gz out/headless/headless_shell out/headless/*.pak
