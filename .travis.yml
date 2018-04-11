@@ -43,7 +43,7 @@ install:
   - echo $TAG
   - export REPO=$TRAVIS_REPO_SLUG
   - echo $REPO
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
 
 script:
