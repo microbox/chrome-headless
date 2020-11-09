@@ -2,7 +2,7 @@ FROM microbox/chromium-builder
 
 RUN echo 'SYSTEM LIMITS' && df -hT && free -h && nproc
 
-ARG CHROMIUM_VERSION
+ARG
 
 RUN gclient config https://chromium.googlesource.com/chromium/src.git
 
